@@ -1,14 +1,22 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-    background-color: aquamarine;
+    background-color: rgb(255, 140, 0);
 }
 
 h1 {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100hv;
-    font-size: 90px;
+    margin-top: 0%;
+    height: 83.5vh;
+    font-size: 150px;
     font-weight: 900;
+    background-color: rgb(244, 163, 86);
     /*for cool gradient animation*/
     /* OPTION 1 --------------------
     background: linear-gradient(
@@ -27,18 +35,20 @@ h1 {
 */
 
     /*OPTION 2 GIF----------------------*/
-    background-image: url('roller_skate.gif');
-    background-size: cover;
+    background-image: url('gifs/roller_skate1.gif');
+    background-size: 90px;
     background-position: center;
-    background-repeat: no-repeat;
+    background-repeat: repeat;
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     color: transparent;
+    -webkit-text-stroke: 1.5px #000000;
+
 }
 
 /* FOR OPTION 1----------------------*/
-/*for "Funkys skate center" text animation*/
+/*for "Funkys skate center" text animation, helper function*/
 @keyframes flowBackground {
     0% {
         background-position: 300% center;
@@ -47,4 +57,36 @@ h1 {
     100% {
         background-position: 0% center;
     }
+}
+
+/*NAV BAR AT THE BOTTOM*/
+nav {
+    display: flex;
+    align-items: center;
+    padding: 15px 30px;
+    background-color: rgb(168, 168, 168);
+    width: 110vw;
+    flex: 1;
+    height: 10vh;
+}
+
+.nav-links, .nav-time, .spacer {
+    flex: 1;
+    display: flex;
+}
+
+.out-btn, .in-btn {
+    cursor: pointer;
+    font-weight: bold;
+    padding: 8px 16px;
+}
+
+.nav-time {
+    justify-content: center;
+}
+
+.nav-links {
+    list-style: none;
+    width: 100%;
+    justify-content: space-between;
 }
