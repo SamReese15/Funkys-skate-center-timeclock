@@ -2,24 +2,29 @@
 
 <html>
 
-  <head>
-    <title>Funkys Skate Center</title>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="styles.css">
-  </head>
+<head>
+  <title>Funkys Skate Center</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="styles.css">
+</head>
 
-  <body>
+<body>
+
   <div class="main-content">
+
     <h1 class="animated">Funkys Skate Center</h1>
 
-  <div class="welcome-button">
-    <button value="log-In">Log In</button>
+    <div class="date">
+      <p id="daily-date">Loading Date...</p>
+    </div>
+
+    <div class="time" id="time-clock">Loading Time...</div>
+
+    <div class="welcome-button">
+      <button class="log-in">Log In</button>
+    </div>
   </div>
 
-  <div class="date" id="daily-date">Loading date...</div>
-
-  <div class="time" id="time-clock">Loading Time...</div>
-  </div>
   <nav class="navbar">
     <div class="nav-links">
       <button class="out-btn">Clock In</button>
@@ -30,5 +35,51 @@
     </div>
   </nav>
 
-  </body>
+  <!-- start for popup password input, login button funactionality -->
+  <div class="login-popup" id="loginOverlay">
+    <div class="login-window">
+
+      <input
+        type="password"
+        id="pinDisplay"
+        maxlength="4"
+        readonly
+        placeholder="Enter Password"
+      >
+
+      <div class="keypad">
+        <button data-number="1">1</button>
+        <button data-number="2">2</button>
+        <button data-number="3">1</button>
+        <button data-number="4">2</button>
+        <button data-number="5">1</button>
+        <button data-number="6">2</button>
+        <button data-number="7">1</button>
+        <button data-number="8">2</button>
+        <button data-number="9">1</button>
+        <button id="clearPin">Clear</button>
+        <button data-number="0">2</button>
+        <button id="deletePin">⌫</button>
+      </div>
+
+        <button id="submitPin" class="submit-pin">Submit</button>
+    </div>
+  </div>
+
+</body>
+
 </html>
+
+<script>
+  const now = new Date();
+    // Update the month title and year in the top bar
+    document.getElementById('daily-date').textContent = "Today: " + (now.getMonth() + 1) + '/' + now.getDate() + "/" + now.getFullYear();
+
+  const formattedTime = now.toLocaleTimeString();
+    //update the time
+    document.getElementById('time-clock').textContent = "Time: " + formattedTime;
+    document.getElementById('nav-time-clock').innerText = "Time: " + formattedTime;
+
+    runLiveClock();
+    setInterval(runLiveClock, 1000);
+</script>
