@@ -8,5 +8,43 @@ h1 {
     align-items: center;
     height: 100hv;
     font-size: 90px;
+    font-weight: 900;
+    /*for cool gradient animation*/
+    /* OPTION 1 --------------------
+    background: linear-gradient(
+        90deg,
+    #ff007f,
+    #7f00ff,
+    #00f0ff,
+    #ff007f
+    );
+    background-size: 300% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    animation: flowBackground 5s linear infinite;
+*/
 
+    /*OPTION 2 GIF----------------------*/
+    background-image: url('roller_skate.gif');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+}
+
+/* FOR OPTION 1----------------------*/
+/*for "Funkys skate center" text animation*/
+@keyframes flowBackground {
+    0% {
+        background-position: 300% center;
+    }
+
+    100% {
+        background-position: 0% center;
+    }
 }
