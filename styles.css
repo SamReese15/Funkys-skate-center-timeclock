@@ -5,18 +5,27 @@
 }
 
 body {
+    display: flex;
     background-color: rgb(255, 140, 0);
+    flex-direction: column;
+}
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+    padding-bottom: 12vh;
+    text-align: center;
+    align-items: top;
 }
 
 h1 {
-    display: flex;
-    justify-content: center;
-    align-items: top;
     margin-top: 0%;
-    height: 83.5vh;
     font-size: 150px;
     font-weight: 900;
     background-color: rgb(244, 163, 86);
+    height: 70vh;
     /*for cool gradient animation*/
     /* OPTION 1 --------------------
     background: linear-gradient(
@@ -57,6 +66,13 @@ h1 {
     100% {
         background-position: 0% center;
     }
+}
+
+/*Date under header*/
+.date, .time {
+    font-size: 20px;
+    font-weight:100;
+    color: black;
 }
 
 /*NAV BAR AT THE BOTTOM*/
