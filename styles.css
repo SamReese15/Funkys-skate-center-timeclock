@@ -65,7 +65,7 @@ nav {
     align-items: center;
     padding: 15px 30px;
     background-color: rgb(168, 168, 168);
-    width: 110vw;
+    width: 100vw;
     flex: 1;
     height: 10vh;
 }
@@ -73,20 +73,24 @@ nav {
 .nav-links, .nav-time, .spacer {
     flex: 1;
     display: flex;
+    align-items: center;
 }
 
 .out-btn, .in-btn {
     cursor: pointer;
     font-weight: bold;
-    padding: 8px 16px;
+    padding: 20px 50px;
+    border-radius: 10%;
+    color: white;
+    background-color: black;
+    font-size: 19px;
+    margin-left: 0%;
+}
+
+.spacer {
+    justify-content: flex-end;   /* Pushes Clock Out pinned to the right edge */
 }
 
 .nav-time {
     justify-content: center;
-}
-
-.nav-links {
-    list-style: none;
-    width: 100%;
-    justify-content: space-between;
 }
