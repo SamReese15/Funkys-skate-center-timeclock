@@ -117,16 +117,35 @@
   });
 
   //submit button
-  submitPin.addEventListener("click", () => {
+  const GOOGLE_SCRIPT_URL = 
+  "https://script.google.com/macros/s/AKfycbwwkxkXgssicwKbpkMygAUQr2eRTONxYTHDnt0hOCzDvWLcCFFWbSJtrQ4t_N_1pza4/exec";
+
+  submitPin.addEventListener("click", async() => {
+    //make sure it's four digits
     const pin = pinDisplay.value;
 
+    //make sure its length is 4
     if (pin.length !== 4) {
       alert("Please enter a 4-digit password.");
       return;
     }
 
-    console.log("Password entered:", pin);
+    submitPin.disabled = true; // Disable the button to prevent multiple submissions
+    submitPin.textContent = "Submitting..."; // Change button text to indicate submission
+
+    try {
+      const response = await fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+
+        body: JSON.stringify({ pin: pin }),
+      })
+    } catch (error) {
+      console.error("Error submitting PIN:", error);
+      alert("An error occurred while submitting the PIN. Please try again or contact manager.");
+    }
   });
+
+  
 
   //exit button
   closeLogin.addEventListener("click", () => {
