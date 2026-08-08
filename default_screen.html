@@ -70,18 +70,6 @@
 
     </div>
   </div>
-  <!-- FORGOT PASSWORD POPUP-->
-  <div class="forgot-overlay" id="forgotOverlay">
-    <div class="forgot-window">
-      <h2>Forgot Password?</h2>
-
-      <p>
-        Password is the last four of your SSN
-      </p>
-
-      <button id="closeForgot">X</button>
-    </div>
-  </div>
 </body>
 
 </html>
@@ -104,6 +92,7 @@
   const clearPin = document.getElementById("clearPin");
   const deletePin = document.getElementById("deletePin");
   const closeLogin = document.getElementById("closeLogin");
+  const forgotPin = document.getElementById("forgotPin");
 
   loginButton.addEventListener("click", () => {
     loginOverlay.style.display = "flex";
@@ -143,5 +132,10 @@
   closeLogin.addEventListener("click", () => {
     loginOverlay.style.display = "none";
     pinDisplay.value = "";
+  });
+
+  //forgot password
+  forgotPin.addEventListener("click", () => {
+    alert("Password is the last 4 of your SSN.");
   });
 </script>
