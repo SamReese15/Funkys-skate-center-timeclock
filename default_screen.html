@@ -43,13 +43,7 @@
         <button id="closeLogin">✘</button>
       </div>
 
-      <input
-        type="password"
-        id="pinDisplay"
-        maxlength="4"
-        readonly
-        placeholder="Enter Password"
-      >
+      <input type="password" id="pinDisplay" maxlength="4" readonly placeholder="Enter Password">
 
       <div class="keypad">
         <button data-number="1">1</button>
@@ -66,8 +60,14 @@
         <button id="deletePin">⌫</button>
       </div>
 
+      <div class="submit-btn">
         <button id="submitPin" class="submit-pin">Submit</button>
+      </div>
+
+      <div class="forgot-btn">
         <button id="forgotPin" class="forgot-pin">Forgot Password?</button>
+      </div>
+
     </div>
   </div>
   <!-- FORGOT PASSWORD POPUP-->
@@ -88,60 +88,60 @@
 
 <script>
   const now = new Date();
-    // Update the month title and year in the top bar
-    document.getElementById('daily-date').textContent = "Today: " + (now.getMonth() + 1) + '/' + now.getDate() + "/" + now.getFullYear();
+  // Update the month title and year in the top bar
+  document.getElementById('daily-date').textContent = "Today: " + (now.getMonth() + 1) + '/' + now.getDate() + "/" + now.getFullYear();
 
   const formattedTime = now.toLocaleTimeString();
-    //update the time
-    document.getElementById('time-clock').textContent = "Time: " + formattedTime;
-    document.getElementById('nav-time-clock').innerText = "Time: " + formattedTime;
+  //update the time
+  document.getElementById('time-clock').textContent = "Time: " + formattedTime;
+  document.getElementById('nav-time-clock').innerText = "Time: " + formattedTime;
 
-    //log in button
-    const loginButton = document.getElementById("loginButton");
-    const loginOverlay = document.getElementById("loginOverlay");
-    const pinDisplay = document.getElementById("pinDisplay");
-    const submitPin = document.getElementById("submitPin");
-    const clearPin = document.getElementById("clearPin");
-    const deletePin = document.getElementById("deletePin");
-    const closeLogin = document.getElementById("closeLogin");
+  //log in button
+  const loginButton = document.getElementById("loginButton");
+  const loginOverlay = document.getElementById("loginOverlay");
+  const pinDisplay = document.getElementById("pinDisplay");
+  const submitPin = document.getElementById("submitPin");
+  const clearPin = document.getElementById("clearPin");
+  const deletePin = document.getElementById("deletePin");
+  const closeLogin = document.getElementById("closeLogin");
 
-    loginButton.addEventListener("click", () => {
-      loginOverlay.style.display = "flex";
-    });
+  loginButton.addEventListener("click", () => {
+    loginOverlay.style.display = "flex";
+  });
 
-    document.querySelectorAll("[data-number]").forEach(button => {
-      button.addEventListener("click", () => {
-        if (pinDisplay.value.length < 4) {
-          pinDisplay.value += button.dataset.number;
-        }
-      });
-    });
-
-    //clear button
-    clearPin.addEventListener("click", () => {
-      pinDisplay.value = "";
-    });
-
-    //delete button
-    deletePin.addEventListener("click", () => {
-      pinDisplay.value = pinDisplay.value.slice(0, -1);
-    });
-
-    //submit button
-    submitPin.addEventListener("click", () => {
-      const pin = pinDisplay.value;
-
-      if (pin.length !== 4) {
-        alert("Please enter a 4-digit password.");
-        return;
+  document.querySelectorAll("[data-number]").forEach(button => {
+    button.addEventListener("click", () => {
+      if (pinDisplay.value.length < 4) {
+        pinDisplay.value += button.dataset.number;
       }
-
-      console.log("Password entered:", pin);
     });
+  });
 
-    //exit button
-    closeLogin.addEventListener("click", () => {
-      loginOverlay.style.display = "none";
-      pinDisplay.value = "";
-    });
+  //clear button
+  clearPin.addEventListener("click", () => {
+    pinDisplay.value = "";
+  });
+
+  //delete button
+  deletePin.addEventListener("click", () => {
+    pinDisplay.value = pinDisplay.value.slice(0, -1);
+  });
+
+  //submit button
+  submitPin.addEventListener("click", () => {
+    const pin = pinDisplay.value;
+
+    if (pin.length !== 4) {
+      alert("Please enter a 4-digit password.");
+      return;
+    }
+
+    console.log("Password entered:", pin);
+  });
+
+  //exit button
+  closeLogin.addEventListener("click", () => {
+    loginOverlay.style.display = "none";
+    pinDisplay.value = "";
+  });
 </script>

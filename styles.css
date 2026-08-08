@@ -214,6 +214,18 @@ nav {
   cursor: pointer;
 }
 
+.submit-btn button:hover{
+    background: #0ce029;
+}
+
+.forgot-btn button:hover {
+    background: #399ef0;
+    color: white;
+}
+
 .forgot-pin {
     margin-top: 10px;
+    cursor: pointer;
+    border: none;
+    border-bottom: 2px solid rgb(4, 71, 255);
 }
