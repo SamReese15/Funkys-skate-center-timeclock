@@ -173,6 +173,11 @@ nav {
     border-radius: 20%;
 }
 
+#closeLogin:hover {
+    background: red;
+    color: white;
+}
+
 #pinDisplay {
   width: 100%;
   box-sizing: border-box;
