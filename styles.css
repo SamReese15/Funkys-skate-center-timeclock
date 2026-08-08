@@ -156,6 +156,23 @@ nav {
   box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
 }
 
+.exit {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+#closeLogin {
+    background: rgb(187, 185, 185);
+    font-size: 20px;
+    margin-top: -20px;
+    margin-bottom: 10px;
+    margin-right: -20px;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 20%;
+}
+
 #pinDisplay {
   width: 100%;
   box-sizing: border-box;
@@ -167,6 +184,7 @@ nav {
   border-radius: 8px;
 }
 
+/*ADD KEYBOARD INPUT FUNCTIONALITY*/
 .keypad {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
