@@ -103,6 +103,7 @@
     const submitPin = document.getElementById("submitPin");
     const clearPin = document.getElementById("clearPin");
     const deletePin = document.getElementById("deletePin");
+    const closeLogin = document.getElementById("closeLogin");
 
     loginButton.addEventListener("click", () => {
       loginOverlay.style.display = "flex";
@@ -136,5 +137,11 @@
       }
 
       console.log("Password entered:", pin);
+    });
+
+    //exit button
+    closeLogin.addEventListener("click", () => {
+      loginOverlay.style.display = "none";
+      pinDisplay.value = "";
     });
 </script>
