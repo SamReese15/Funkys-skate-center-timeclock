@@ -116,9 +116,9 @@
     pinDisplay.value = pinDisplay.value.slice(0, -1);
   });
 
-  //submit button
-  const GOOGLE_SCRIPT_URL = 
-  "https://script.google.com/macros/s/AKfycbwwkxkXgssicwKbpkMygAUQr2eRTONxYTHDnt0hOCzDvWLcCFFWbSJtrQ4t_N_1pza4/exec";
+  //submit / log in button
+  const GOOGLE_SCRIPT_URL =
+  "https://script.google.com/macros/s/AKfycbwwkxkXgssicwKbpkMygAUQr2eRTONxYTHDnt0hOCzDvWLcCFFWbSJtrQ4t_N_1pza4/exec"; //change this before deployment
 
   submitPin.addEventListener("click", async() => {
     //make sure it's four digits
@@ -133,19 +133,49 @@
     submitPin.disabled = true; // Disable the button to prevent multiple submissions
     submitPin.textContent = "Submitting..."; // Change button text to indicate submission
 
+    //sends pin to google script
     try {
       const response = await fetch(GOOGLE_SCRIPT_URL, {
         method: "POST",
 
-        body: JSON.stringify({ pin: pin }),
-      })
-    } catch (error) {
-      console.error("Error submitting PIN:", error);
-      alert("An error occurred while submitting the PIN. Please try again or contact manager.");
-    }
-  });
+        body: JSON.stringify({ pin: pin
 
-  
+        }),
+      });
+
+      //gets result from google script
+      const result = await response.json();
+
+      console.log(result); // for debugging purposes
+
+      if (result.success) {
+        alert("Welcome, " + result.name + "!");
+
+        loginOverlay.style.display = "none";
+        pinDisplay.value = "";
+
+        submitPin.disabled = false;
+        submitPin.textContent = "Submit";
+
+        console.log("Logged in as: " + result.name);
+      } else {
+        alert("Invalid password.");
+        pinDisplay.value = "";
+        submitPin.disabled = false;
+        submitPin.textContent = "Submit";
+      }
+
+    //catches error in case something goes wrong
+  } catch (error) {
+    console.error("Error logging in: ", error);
+    alert("Unable to log in. Please contact manager.");
+
+    submitPin.disabled = false;
+    submitPin.textContent = "Submit";
+  }
+});
+
+
 
   //exit button
   closeLogin.addEventListener("click", () => {
