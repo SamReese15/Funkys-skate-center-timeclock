@@ -89,7 +89,21 @@ h1 {
     color: white;
 }
 
+.log-out-button button {
+    display: none;
+    margin-top: 20px;
+    background-color: black;
+    border-radius: 8px;
+    padding: 5px 40px;
+    font-size: 30px;
+    color: white;
+}
+
 .log-in {
+    cursor: pointer;
+}
+
+.log-out {
     cursor: pointer;
 }
 

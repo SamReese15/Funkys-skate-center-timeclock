@@ -23,6 +23,10 @@
     <div class="welcome-button">
       <button class="log-in" id="loginButton">Log In</button>
     </div>
+
+    <div class="log-out-button">
+      <button class="log-out" id="logOutButton">Log Out</button>
+    </div>
   </div>
 
   <nav class="navbar">
@@ -78,7 +82,6 @@
   const now = new Date();
   // Update the month title and year in the top bar
   document.getElementById('daily-date').textContent = "Today: " + (now.getMonth() + 1) + '/' + now.getDate() + "/" + now.getFullYear();
-
   const formattedTime = now.toLocaleTimeString();
   const navTime = document.getElementById("nav-time-clock");
   const regTime = document.getElementById("time-clock");
@@ -88,6 +91,7 @@
 
   //log in button
   const loginButton = document.getElementById("loginButton");
+  const logOutButton = document.getElementById("logOutButton")
   const loginOverlay = document.getElementById("loginOverlay");
   const pinDisplay = document.getElementById("pinDisplay");
   const submitPin = document.getElementById("submitPin");
@@ -151,8 +155,11 @@
       console.log(result); // for debugging purposes
 
       if (result.success) {
+        name = result.name;
         navTime.innerText = "Time: " + formattedTime;
-        regTime.textContent = "Logged in as: " + result.name;
+        regTime.textContent = "Logged in as: " + name;
+        loginButton.style.display = "none"; // Hide the log in button
+        logOutButton.style.display = "block"; // Show the log out button
 
         loginOverlay.style.display = "none";
         pinDisplay.value = "";
@@ -160,7 +167,7 @@
         submitPin.disabled = false;
         submitPin.textContent = "Submit";
 
-        console.log("Logged in as: " + result.name);
+        console.log("Logged in as: " + name);
       } else {
         alert("Invalid password.");
         pinDisplay.value = "";
@@ -178,7 +185,14 @@
   }
 });
 
-
+  //log out button
+  logOutButton.addEventListener("click", () => {
+    navTime.innerText = "";
+    regTime.textContent = "Time: " + formattedTime;
+    loginButton.style.display = "block";
+    logOutButton.style.display = "none";
+    name = "";
+  });
 
   //exit button
   closeLogin.addEventListener("click", () => {
@@ -190,4 +204,6 @@
   forgotPin.addEventListener("click", () => {
     alert("Password is the last 4 of your SSN.");
   });
+
+
 </script>
