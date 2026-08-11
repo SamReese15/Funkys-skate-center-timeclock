@@ -81,8 +81,9 @@
 
   const formattedTime = now.toLocaleTimeString();
   const navTime = document.getElementById("nav-time-clock");
+  const regTime = document.getElementById("time-clock");
   //update the time
-  document.getElementById('time-clock').textContent = "Time: " + formattedTime;
+  regTime.textContent = "Time: " + formattedTime;
   navTime.innerText = "";
 
   //log in button
@@ -151,6 +152,7 @@
 
       if (result.success) {
         navTime.innerText = "Time: " + formattedTime;
+        regTime.textContent = "Logged in as: " + result.name;
 
         loginOverlay.style.display = "none";
         pinDisplay.value = "";
