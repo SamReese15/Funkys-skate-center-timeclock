@@ -80,9 +80,10 @@
   document.getElementById('daily-date').textContent = "Today: " + (now.getMonth() + 1) + '/' + now.getDate() + "/" + now.getFullYear();
 
   const formattedTime = now.toLocaleTimeString();
+  const navTime = document.getElementById("nav-time-clock");
   //update the time
   document.getElementById('time-clock').textContent = "Time: " + formattedTime;
-  document.getElementById('nav-time-clock').innerText = "Time: " + formattedTime;
+  navTime.innerText = "";
 
   //log in button
   const loginButton = document.getElementById("loginButton");
@@ -118,7 +119,7 @@
 
   //submit / log in button
   const GOOGLE_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbwwkxkXgssicwKbpkMygAUQr2eRTONxYTHDnt0hOCzDvWLcCFFWbSJtrQ4t_N_1pza4/exec"; //change this before deployment
+  "https://script.google.com/macros/s/AKfycbyTUEcHvJc4ZPJyOiY5lxpAGaoelv4vtvWi9ZmBogmr_SYQvZylfWT78Bl8NzDnmI0D2w/exec"; //change this before deployment
 
   submitPin.addEventListener("click", async() => {
     //make sure it's four digits
@@ -149,7 +150,7 @@
       console.log(result); // for debugging purposes
 
       if (result.success) {
-        alert("Welcome, " + result.name + "!");
+        navTime.innerText = "Time: " + formattedTime;
 
         loginOverlay.style.display = "none";
         pinDisplay.value = "";
