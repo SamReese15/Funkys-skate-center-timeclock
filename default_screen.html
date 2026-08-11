@@ -31,15 +31,15 @@
 
   <nav class="navbar">
     <div class="nav-links">
-      <button class="out-btn">Clock In</button>
+      <button class="in-btn" id="clock-in">Clock In</button>
     </div>
     <div class="nav-time" id="nav-time-clock">Loading Time...</div>
     <div class="spacer">
-      <button class="in-btn">Clock Out</button>
+      <button class="out-btn" id="clock-out">Clock Out</button>
     </div>
   </nav>
 
-  <!-- start for popup password input, login button funactionality -->
+  <!-- start for popup password input, login button functionality -->
   <div class="login-overlay" id="loginOverlay">
     <div class="login-window">
 
@@ -99,6 +99,8 @@
   const deletePin = document.getElementById("deletePin");
   const closeLogin = document.getElementById("closeLogin");
   const forgotPin = document.getElementById("forgotPin");
+  const clockIn = document.getElementById("clock-in");
+  const clockOut = document.getElementById("clock-out");
 
   loginButton.addEventListener("click", () => {
     loginOverlay.style.display = "flex";
@@ -205,5 +207,15 @@
     alert("Password is the last 4 of your SSN.");
   });
 
+  //clock in button
+  clockIn.addEventListener("click", () => {
+    try {
 
+    }
+  });
+
+  //clock out button
+  // clockOut.addEventListener("click", () => {
+
+  // });
 </script>
