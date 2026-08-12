@@ -101,6 +101,7 @@
   const forgotPin = document.getElementById("forgotPin");
   const clockIn = document.getElementById("clock-in");
   const clockOut = document.getElementById("clock-out");
+  let name = null;
 
   loginButton.addEventListener("click", () => {
     loginOverlay.style.display = "flex";
@@ -126,7 +127,7 @@
 
   //submit / log in button
   const GOOGLE_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbyTUEcHvJc4ZPJyOiY5lxpAGaoelv4vtvWi9ZmBogmr_SYQvZylfWT78Bl8NzDnmI0D2w/exec"; //change this before deployment
+  "https://script.google.com/macros/s/AKfycbwS2FVlFkTG74QFVdC8wtfCgHlRF5oD0-QTRTaDRBhNM9hnTbtmvOq0eVZwXKp4UyaTsA/exec"; //change this before deployment
 
   submitPin.addEventListener("click", async() => {
     //make sure it's four digits
@@ -146,8 +147,9 @@
       const response = await fetch(GOOGLE_SCRIPT_URL, {
         method: "POST",
 
-        body: JSON.stringify({ pin: pin
-
+        body: JSON.stringify({
+          action: "login",
+          pin: pin
         }),
       });
 
@@ -208,14 +210,85 @@
   });
 
   //clock in button
-  clockIn.addEventListener("click", () => {
-    try {
-
+  clockIn.addEventListener("click", async () => {
+    if (!name) {
+      alert("Please log in first.");
+      return;
     }
+
+    clockIn.disabled = true;
+    clockIn.textContent = "Clocking In...";
+
+    try {
+      const response = await fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+
+        body: JSON.stringify({
+          action: "clockIn",
+          name: name
+        })
+      });
+
+      const result = await response.json();
+
+      console.log(result);
+
+      if (result.success) {
+        alert("Clocked in successfully. Welcome " + result.name + "!\n" + result.clockIn);
+      } else {
+        //says unable here for debugging purposes
+        alert("Unable to clock in. Please try again or contact manager.");
+      }
+    } catch (error) {
+      //says error clocking in here for debugging purposes
+      console.error("Error clocking in: ", error);
+      alert("Unable to clock in. Please contact manager or try again.");
+    }
+
+    clockIn.disabled = false;
+    clockIn.textContent = "Clock In";
   });
 
   //clock out button
-  // clockOut.addEventListener("click", () => {
+   clockOut.addEventListener("click", async () => {
+    if (!name) {
+      alert("Please log in first.");
+      return;
+    }
 
-  // });
+    clockOut.disabled = true;
+    clockOut.textContent = "Clocking Out...";
+
+    try {
+      const response = await fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+
+        body: JSON.stringify({
+          action: "clockOut",
+          name: name
+        })
+      });
+
+      const responseText = await response.text();
+      console.log("Clock Out Response: ", responseText);
+      const result = JSON.parse(responseText);
+      console.log("Clock Out Result: ", result);
+
+      if (result.success) {
+        alert("Clocked out successfully. Goodbye " + result.name + "!\n" + result.clockOut);
+      } else {
+        //unable here for debugging purposes
+        alert("Unable to clock out. Please try again or contact manager.");
+      }
+
+    } catch (error) {
+      console.error("Error clocking out: ", error);
+      //error here for debugging purposes
+      alert("Error clocking out. Please try again or contact manager.");
+    }
+
+    clockOut.disabled = false;
+    clockOut.textContent = "Clock Out";
+
+  });
 </script>
