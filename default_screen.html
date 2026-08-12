@@ -102,6 +102,8 @@
   const clockIn = document.getElementById("clock-in");
   const clockOut = document.getElementById("clock-out");
   let name = null;
+  let clockedIn = false;
+  let clockedOut = false;
 
   loginButton.addEventListener("click", () => {
     loginOverlay.style.display = "flex";
@@ -125,9 +127,9 @@
     pinDisplay.value = pinDisplay.value.slice(0, -1);
   });
 
-  //submit / log in button
+  //log in button
   const GOOGLE_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbwS2FVlFkTG74QFVdC8wtfCgHlRF5oD0-QTRTaDRBhNM9hnTbtmvOq0eVZwXKp4UyaTsA/exec"; //change this before deployment
+  "https://script.google.com/macros/s/AKfycbyKDGhtgMxfw7ZaG5fJ5il4hDNmZDZtWgG_0ytyO5XG5Z68K_sBDPoLEUOwSPPN9Fu_sw/exec"; //change this before deployment
 
   submitPin.addEventListener("click", async() => {
     //make sure it's four digits
@@ -234,15 +236,22 @@
       console.log(result);
 
       if (result.success) {
+        clockedOut = false; // Reset clockedOut status on successful clock in
+        clockedIn = true; // Set clockedIn status on successful clock in
         alert("Clocked in successfully. Welcome " + result.name + "!\n" + result.clockIn);
       } else {
         //says unable here for debugging purposes
+        if (clockedIn) {
+          alert("You are already clocked in. Please contact manager if this is an error.");
+          return;
+        }
+
         alert("Unable to clock in. Please try again or contact manager.");
       }
     } catch (error) {
       //says error clocking in here for debugging purposes
       console.error("Error clocking in: ", error);
-      alert("Unable to clock in. Please contact manager or try again.");
+      alert("Error clocking in. Please contact manager or try again.");
     }
 
     clockIn.disabled = false;
@@ -275,6 +284,8 @@
       console.log("Clock Out Result: ", result);
 
       if (result.success) {
+        clockedIn = false; // Reset clockedIn status on successful clock out
+        clockedOut = true; // Set clockedOut status on successful clock out
         alert("Clocked out successfully. Goodbye " + result.name + "!\n" + result.clockOut);
       } else {
         //unable here for debugging purposes
