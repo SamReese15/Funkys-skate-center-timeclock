@@ -32,6 +32,7 @@
   <nav class="navbar">
     <div class="nav-links">
       <button class="in-btn" id="clock-in">Clock In</button>
+      <button class="new-pay-period" id="newPayPeriod">New Pay Period</button>
     </div>
     <div class="nav-time" id="nav-time-clock">Loading Time...</div>
     <div class="spacer">
@@ -101,9 +102,9 @@
   const forgotPin = document.getElementById("forgotPin");
   const clockIn = document.getElementById("clock-in");
   const clockOut = document.getElementById("clock-out");
+  const newPayPeriod = document.getElementById("newPayPeriod");
   let name = null;
   let clockedIn = false;
-  let clockedOut = false;
 
   loginButton.addEventListener("click", () => {
     loginOverlay.style.display = "flex";
@@ -129,7 +130,7 @@
 
   //log in button
   const GOOGLE_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbzjVcbw7UnSch97ghXzbbTgOzu9jQ5gY5ZAV73iEzaPQ52lKHxU7gvZeFmWA3Y8EIp6mQ/exec"; //change this before deployment
+  "https://script.google.com/macros/s/AKfycbyiaYhGkrfJOzP2kVhpc7NRQS2D__97Tbj5zhDvu6aCmmpuWTKHBfUZpe5u2xtAUkMOTg/exec"; //change this before deployment
 
   submitPin.addEventListener("click", async() => {
     //make sure it's four digits
@@ -236,16 +237,10 @@
       console.log(result);
 
       if (result.success) {
-        clockedOut = false; // Reset clockedOut status on successful clock in
         clockedIn = true; // Set clockedIn status on successful clock in
         alert("Clocked in successfully. Welcome " + result.name + "!\n" + result.clockIn);
       } else {
         //says unable here for debugging purposes
-        if (clockedIn) {
-          alert("You are already clocked in. Please contact manager if this is an error.");
-          return;
-        }
-
         alert("Unable to clock in. Please try again or contact manager.");
       }
     } catch (error) {
@@ -265,7 +260,6 @@
       return;
     }
 
-    clockOut.disabled = true;
     clockOut.textContent = "Clocking Out...";
 
     try {
@@ -278,14 +272,12 @@
         })
       });
 
-      const responseText = await response.text();
-      console.log("Clock Out Response: ", responseText);
-      const result = JSON.parse(responseText);
+      const result = await response.json();
+
       console.log("Clock Out Result: ", result);
 
       if (result.success) {
         clockedIn = false; // Reset clockedIn status on successful clock out
-        clockedOut = true; // Set clockedOut status on successful clock out
         alert("Clocked out successfully. Goodbye " + result.name + "!\n" + result.clockOut);
       } else {
         //unable here for debugging purposes
@@ -300,6 +292,10 @@
 
     clockOut.disabled = false;
     clockOut.textContent = "Clock Out";
+
+  });
+
+  newPayPeriod.addEventListener("click", async () => {
 
   });
 </script>

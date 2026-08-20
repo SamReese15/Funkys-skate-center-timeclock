@@ -107,6 +107,20 @@ h1 {
     cursor: pointer;
 }
 
+.new-pay-period-button button {
+    display: none;
+    margin-top: 20px;
+    background-color: black;
+    border-radius: 8px;
+    padding: 5px 40px;
+    font-size: 30px;
+    color: white;
+}
+
+.new-pay-period-button {
+    cursor: pointer;
+}
+
 /*NAV BAR AT THE BOTTOM*/
 nav {
     display: flex;
@@ -127,7 +141,11 @@ nav {
     align-items: center;
 }
 
-.out-btn, .in-btn {
+.nav-links {
+    justify-content: space-between;
+}
+
+.out-btn, .in-btn, .new-pay-period {
     cursor: pointer;
     font-weight: bold;
     padding: 20px 50px;
@@ -136,6 +154,12 @@ nav {
     background-color: black;
     font-size: 19px;
     margin-left: 0%;
+    white-space: nowrap;
+}
+
+.new-pay-period {
+    margin-left: 20px;
+    margin-right: 20px;
 }
 
 .spacer {
