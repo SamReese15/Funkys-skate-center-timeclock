@@ -130,9 +130,9 @@
 
   //log in button
   const GOOGLE_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbyiaYhGkrfJOzP2kVhpc7NRQS2D__97Tbj5zhDvu6aCmmpuWTKHBfUZpe5u2xtAUkMOTg/exec"; //change this before deployment
+    "https://script.google.com/macros/s/AKfycby9iMLh_m8TXHLBkmdvz2Ks4McaJ84fmmJE6NiHpiE1cM7ml5sSMg1JUXD2N4_D2ahUWw/exec"; //change this before deployment
 
-  submitPin.addEventListener("click", async() => {
+  submitPin.addEventListener("click", async () => {
     //make sure it's four digits
     const pin = pinDisplay.value;
 
@@ -163,6 +163,13 @@
 
       if (result.success) {
         name = result.name;
+
+        if (name === "Callum" || name === "Rose") {
+          newPayPeriod.style.display = "block"; // Show the new pay period button
+        } else {
+          newPayPeriod.style.display = "none";
+        }
+
         navTime.innerText = "Time: " + formattedTime;
         regTime.textContent = "Logged in as: " + name;
         loginButton.style.display = "none"; // Hide the log in button
@@ -182,15 +189,15 @@
         submitPin.textContent = "Submit";
       }
 
-    //catches error in case something goes wrong
-  } catch (error) {
-    console.error("Error logging in: ", error);
-    alert("Unable to log in. Please contact manager.");
+      //catches error in case something goes wrong
+    } catch (error) {
+      console.error("Error logging in: ", error);
+      alert("Unable to log in. Please contact manager.");
 
-    submitPin.disabled = false;
-    submitPin.textContent = "Submit";
-  }
-});
+      submitPin.disabled = false;
+      submitPin.textContent = "Submit";
+    }
+  });
 
   //log out button
   logOutButton.addEventListener("click", () => {
@@ -198,6 +205,7 @@
     regTime.textContent = "Time: " + formattedTime;
     loginButton.style.display = "block";
     logOutButton.style.display = "none";
+    newPayPeriod.style.display = "none";
     name = "";
   });
 
@@ -254,7 +262,7 @@
   });
 
   //clock out button
-   clockOut.addEventListener("click", async () => {
+  clockOut.addEventListener("click", async () => {
     if (!name) {
       alert("Please log in first.");
       return;
@@ -295,7 +303,54 @@
 
   });
 
+  //pay period button
   newPayPeriod.addEventListener("click", async () => {
+    if (!name) {
+      alert("Please log in first.");
+      return;
+    }
 
+    if (name !== "Callum" && name !== "Rose") {
+      alert("You do not have permission to start a new pay period.");
+      return;
+    }
+
+    const confirmation = confirm("Are you sure you want to start a new pay period? \nThis action cannot be undone. \nThe current time sheet will be saved to history.");
+
+    if (!confirmation) {
+      return;
+    }
+
+    newPayPeriod.disabled = true;
+    newPayPeriod.textContent = "Starting New Pay Period...";
+
+    try {
+      const response = await fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+
+        body: JSON.stringify({
+          action: "newPayPeriod",
+          name: name
+        })
+      });
+
+      const result = await response.json();
+      console.log("New Pay Period Result: ", result);
+
+      if (result.success) {
+        alert("New pay period started successfully!");
+      } else {
+        //says unable here for debugging purposes
+        alert("Unable to start a new pay period");
+      }
+    } catch (error) {
+      console.error("Error starting new pay period: ", error);
+      alert("Error starting new pay period. "
+        + "Please try again."
+      );
+    }
+
+    newPayPeriod.disabled = false;
+    newPayPeriod.textContent = "New Pay Period";
   });
 </script>
