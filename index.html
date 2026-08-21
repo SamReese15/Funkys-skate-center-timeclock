@@ -312,6 +312,9 @@
         clockedIn = true; // Set clockedIn status on successful clock in
         alert("Clocked in successfully. Welcome " + result.name + "!\n" + result.clockIn);
       } else {
+        if (clockedIn) {
+          alert("You are already clocked in. If this is an error, please contact manager.")
+        }
         //says unable here for debugging purposes
         alert("Unable to clock in. Please try again or contact manager.");
       }
@@ -353,6 +356,9 @@
         alert("Clocked out successfully. Goodbye " + result.name + "!\n" + result.clockOut);
       } else {
         //unable here for debugging purposes
+        if (!clockedIn) {
+          alert("You have not clocked In. Please contact manager if this is an error.")
+        }
         alert("Unable to clock out. Please try again or contact manager.");
       }
 
