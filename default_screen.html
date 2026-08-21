@@ -27,6 +27,10 @@
     <div class="log-out-button">
       <button class="log-out" id="logOutButton">Log Out</button>
     </div>
+
+    <div class="timesheet" id="timesheetPage">
+      <button class="timesheet-page-button" id="timeSheetButton">Time sheet</button>
+    </div>
   </div>
 
   <nav class="navbar">
@@ -80,17 +84,51 @@
 </html>
 
 <script>
-  const now = new Date();
-  // Update the month title and year in the top bar
-  document.getElementById('daily-date').textContent = "Today: " + (now.getMonth() + 1) + '/' + now.getDate() + "/" + now.getFullYear();
-  const formattedTime = now.toLocaleTimeString();
+  let name = null;
+  let clockedIn = false;
   const navTime = document.getElementById("nav-time-clock");
   const regTime = document.getElementById("time-clock");
-  //update the time
-  regTime.textContent = "Time: " + formattedTime;
+
+  function updateClock() {
+    const now = new Date();
+
+    // Update date
+    document.getElementById('daily-date').textContent =
+      "Today: " +
+      (now.getMonth() + 1) + '/' +
+      now.getDate() + "/" +
+      now.getFullYear();
+
+    // Main display
+    if (name) {
+      regTime.textContent = "Logged in as: " + name;
+    } else {
+      regTime.textContent = "Time: " + now.toLocaleTimeString();
+    }
+
+    // Navbar clock
+    if (name) {
+      navTime.innerText = "Time: " + now.toLocaleTimeString();
+    } else {
+      navTime.innerText = "";
+    }
+  }
+
+  // Run immediately
+  updateClock();
+
+  // Keep both clocks running
+  setInterval(updateClock, 1000);
+
   navTime.innerText = "";
 
-  //log in button
+  // Login request protection.
+  // If the user closes the login window before the request finishes,
+  // AbortController cancels the fetch request in the browser.
+  // loginAttempt provides an extra safeguard so an old response
+  // cannot log the user in after the login window was cancelled.
+  let loginController = null;
+  let loginAttempt = 0;
   const loginButton = document.getElementById("loginButton");
   const logOutButton = document.getElementById("logOutButton")
   const loginOverlay = document.getElementById("loginOverlay");
@@ -103,8 +141,7 @@
   const clockIn = document.getElementById("clock-in");
   const clockOut = document.getElementById("clock-out");
   const newPayPeriod = document.getElementById("newPayPeriod");
-  let name = null;
-  let clockedIn = false;
+  const timeSheet = document.getElementById("timeSheetButton");
 
   loginButton.addEventListener("click", () => {
     loginOverlay.style.display = "flex";
@@ -130,11 +167,12 @@
 
   //log in button
   const GOOGLE_SCRIPT_URL =
-    "https://script.google.com/macros/s/AKfycbwilvFuqb_y1UctPO_PmFx6Nd2hwWaTyCeDs4Oc7IKwVZPuWbCt1k41mdYUJKZ332AXDQ/exec"; //change this before deployment
+    "https://script.google.com/macros/s/AKfycbxyNnbnP_fW_kGewRIcZO9lqzUux27EFhMC00L1zp5W0tfwzc-hHpSDZEyIDltPyj4Dyg/exec"; //change this before deployment
 
   submitPin.addEventListener("click", async () => {
     //make sure it's four digits
     const pin = pinDisplay.value;
+    const thisLoginAttempt = ++loginAttempt; // Increment the login attempt counter
 
     //make sure its length is 4
     if (pin.length !== 4) {
@@ -147,9 +185,10 @@
 
     //sends pin to google script
     try {
+      loginController = new AbortController();
       const response = await fetch(GOOGLE_SCRIPT_URL, {
         method: "POST",
-
+        signal: loginController.signal,
         body: JSON.stringify({
           action: "login",
           pin: pin
@@ -161,16 +200,24 @@
 
       console.log(result); // for debugging purposes
 
+      // Ignore this response if the login was cancelled
+      //ensures login doesn't continue if the user pressed "X" to cancel.
+      if (thisLoginAttempt !== loginAttempt) {
+        return;
+      }
+
       if (result.success) {
         name = result.name;
 
         if (name === "Callum" || name === "Rose") {
-          newPayPeriod.style.display = "block"; // Show the new pay period button
+          newPayPeriod.style.display = "block"; //show the new pay period button
+          timeSheet.style.display = "block"; // Show the time sheet button
         } else {
           newPayPeriod.style.display = "none";
+          timeSheet.style.display = "none";
         }
 
-        navTime.innerText = "Time: " + formattedTime;
+        navTime.innerText = "Time: " + new Date().toLocaleTimeString();
         regTime.textContent = "Logged in as: " + name;
         loginButton.style.display = "none"; // Hide the log in button
         logOutButton.style.display = "block"; // Show the log out button
@@ -191,6 +238,11 @@
 
       //catches error in case something goes wrong
     } catch (error) {
+
+      if (error.name === "AbortError") {
+        return;
+      }
+
       console.error("Error logging in: ", error);
       alert("Unable to log in. Please contact manager.");
 
@@ -202,17 +254,29 @@
   //log out button
   logOutButton.addEventListener("click", () => {
     navTime.innerText = "";
-    regTime.textContent = "Time: " + formattedTime;
+    regTime.textContent = "Time: " + new Date().toLocaleTimeString();
     loginButton.style.display = "block";
     logOutButton.style.display = "none";
     newPayPeriod.style.display = "none";
+    timeSheet.style.display = "none";
     name = "";
+
+    updateClock(); // Update the main clock to show the current time
   });
 
   //exit button
   closeLogin.addEventListener("click", () => {
+    loginAttempt++; // Increment the login attempt counter to cancel any ongoing login attempts
+
+    if (loginController) {
+      loginController.abort();
+      loginController = null;
+    }
+
     loginOverlay.style.display = "none";
     pinDisplay.value = "";
+    submitPin.textContent = "Submit";
+    submitPin.disabled = false;
   });
 
   //forgot password
@@ -352,5 +416,42 @@
 
     newPayPeriod.disabled = false;
     newPayPeriod.textContent = "New Pay Period";
+  });
+
+  //Time sheet button for managers
+  timeSheet.addEventListener("click", async () => {
+    if (!name) {
+      alert("Please log in first.");
+      return;
+    }
+
+    if (name !== "Callum" && name !== "Rose") {
+      alert("You do not have permission to view the time sheet.");
+      return;
+    }
+
+    try {
+      const response = await fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+
+        body: JSON.stringify({
+          action: "viewTimeSheet",
+          name: name
+        })
+      });
+
+      const result = await response.json();
+      console.log("View Time Sheet Result: ", result);
+
+      if (result.success) {
+        // Open the time sheet in a new tab
+        window.open(result.timeSheetUrl, '_blank');
+      } else {
+        alert("Unable to view the time sheet. Please try again or contact manager.");
+      }
+    } catch (error) {
+      console.error("Error viewing time sheet: ", error);
+      alert("Error viewing time sheet. Please try again or contact manager.");
+    }
   });
 </script>
